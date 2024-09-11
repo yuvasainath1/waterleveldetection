@@ -16,7 +16,9 @@ from utils.utils import InputPadder
 
 
 
-DEVICE = 'cuda'
+# DEVICE = 'cuda'
+DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+# model.to(DEVICE)
 
 
 
@@ -37,7 +39,9 @@ def load_image(image):
 
 def main(args):
     model = torch.nn.DataParallel(RAFT(args))
-    model.load_state_dict(torch.load(args.model))
+    # model.load_state_dict(torch.load(args.model))
+    model.load_state_dict(torch.load(args.model, map_location=torch.device('cpu')))
+
 
     model = model.module
     model.to(DEVICE)
